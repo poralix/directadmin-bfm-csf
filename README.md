@@ -5,4 +5,13 @@ A common method of gaining access over a server is to use a technique called a b
 
 To prevent this, we can use a brute force login detection system in DirectAdmin, so called BFM (Brute Force Monitor).
 
-Instructions can be found here: https://help.poralix.com/articles/how-to-block-ips-with-csf-directadmin-bfm
+# Installation guide
+
+```
+cd ~
+wget -O csf-bfm-install.sh https://raw.githubusercontent.com/poralix/directadmin-bfm-csf/master/install.sh
+chmod 700 csf-bfm-install.sh
+./csf-bfm-install.sh
+```
+
+Full Instructions can be found here: https://help.poralix.com/articles/how-to-block-ips-with-csf-directadmin-bfm
