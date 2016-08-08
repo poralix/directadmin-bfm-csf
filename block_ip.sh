@@ -4,8 +4,11 @@
 # for www.plugins-da.net
 # block_ip.sh script to run BFM (Directadmin) with CSF/LFD
 # ====================================================================
-# Version: 0.1.6 Sun May  1 16:52:02 NOVT 2016
-# Last modified: Sun May  1 16:52:02 NOVT 2016
+# Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
+# Last modified: Mon Aug  8 18:06:23 +07 2016
+# ====================================================================
+# Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
+# Bugfix:  A support for TTL=0 (in Directadmin) added
 # ====================================================================
 # Version: 0.1.5 Mon Apr 25 11:30:01 NOVT 2016
 # Changes: A switcher USE_PORT_SELECTED_BLOCK added
@@ -118,9 +121,16 @@ fi;
 if [ "${USE_PORT_SELECTED_BLOCK}" == "1" ];
 then
     TTL=`/usr/local/directadmin/directadmin c | grep unblock_brute_ip_time= | cut -d\= -f2`;
-    TTL=$((TTL*3*60)); # It is Directadmin which unblocks IP, so we need to have enough long TTL
-                       # so that Directadmin have a chance to unblock it
-                       # Additionaly convert minutes to seconds *60
+
+    if [ ${TTL} == "0" ];
+    then
+        TTL="1825d";       # If TTL=0 then IP should be blocked forever
+                           # here we set TTL to 5 years = 365d * 5
+    else
+        TTL=$((TTL*3*60)); # It is Directadmin which unblocks IP, so we need to have enough long TTL
+                           # so that Directadmin have a chance to unblock it
+                           # Additionaly convert minutes to seconds *60
+    fi;
     BLOCK_PORTS="";
 
     # We should have data= from Directadmin in order to detect 
