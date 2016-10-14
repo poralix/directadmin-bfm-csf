@@ -22,8 +22,8 @@ cd ${DIR} || exit 1;
 function do_install()
 {
     echo "[OK] Installing ${1} into ${DIR}";
-    [ -f "${1}" ] && cp -f ${1} ${1}.bak;
-    wget -q -O ${1} ${2};
+    [ -f "${1}" ] && cp -f ${1} ${1}.bak && chmod 600 ${1}.bak;
+    wget --no-check-certificate -q -O ${1} ${2};
     chmod 700 ${1};
     chown diradmin:diradmin ${1};
 }
