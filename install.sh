@@ -9,6 +9,7 @@
 
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
+DIR="/usr/local/directadmin/scripts/custom/"
 
 if [ ! -x "${CSF}" ] || [ ! -f "${CDF}" ];
 then
@@ -16,22 +17,27 @@ then
     exit 1;
 fi;
 
-cd /usr/local/directadmin/scripts/custom/;
-[ -f "block_ip.sh" ] && cp -f block_ip.sh block_ip.sh.bak;
-[ -f "unblock_ip.sh" ] && cp -f unblock_ip.sh unblock_ip.sh.bak;
-[ -f "show_blocked_ips.sh" ] && cp -f show_blocked_ips.sh show_blocked_ips.sh.bak;
-[ -f "brute_force_notice_ip.sh" ] && cp -f brute_force_notice_ip.sh brute_force_notice_ip.sh.bak;
+cd ${DIR} || exit 1;
 
-wget -q -O block_ip.sh http://files.plugins-da.net/dl/csf_block_ip.sh.txt;
-wget -q -O unblock_ip.sh http://files.plugins-da.net/dl/csf_unblock_ip.sh.txt;
-wget -q -O show_blocked_ips.sh http://files.plugins-da.net/dl/csf_show_blocked_ips.sh.txt;
-wget -q -O brute_force_notice_ip.sh http://files.directadmin.com/services/all/brute_force_notice_ip.sh
-chmod 700 brute_force_notice_ip.sh block_ip.sh show_blocked_ips.sh unblock_ip.sh;
+function do_install()
+{
+    echo "[OK] Installing ${1} into ${DIR}";
+    [ -f "${1}" ] && cp -f ${1} ${1}.bak;
+    wget -q -O ${1} ${2};
+    chmod 700 ${1};
+    chown diradmin:diradmin ${1};
+}
+
+do_install "block_ip.sh" "http://files.plugins-da.net/dl/csf_block_ip.sh.txt";
+do_install "unblock_ip.sh" "http://files.plugins-da.net/dl/csf_unblock_ip.sh.txt";
+do_install "show_blocked_ips.sh" "http://files.plugins-da.net/dl/csf_show_blocked_ips.sh.txt";
+do_install "brute_force_notice_ip.sh" "http://files.directadmin.com/services/all/brute_force_notice_ip.sh";
 
 [ -f "/root/blocked_ips.txt" ] || touch /root/blocked_ips.txt;
 [ -f "/root/exempt_ips.txt" ] || touch /root/exempt_ips.txt;
 
 echo "[OK] Scripts installed!";
-echo "[OK] Make sure that Brute-force monitor is enabled in Directadmin";
+echo "[OK] Make sure that Brute-force monitor is enabled in Directadmin with bruteforce=1";
+echo "[NOTICE] Current value: `/usr/local/directadmin/directadmin c | grep ^bruteforce=`";
 
 exit 0;
