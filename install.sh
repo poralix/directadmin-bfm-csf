@@ -4,12 +4,12 @@
 # for www.plugins-da.net
 # ============================================================
 # Version: 0.1.0 Mon Aug  8 18:42:39 +07 2016
-# Last modified: Mon Aug  8 18:42:39 +07 2016
+# Last modified:                  Nov 12 2016
 # ============================================================
 
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
-DIR="/usr/local/directadmin/scripts/custom/"
+DIR="/usr/local/directadmin/scripts/custom/";
 
 if [ ! -x "${CSF}" ] || [ ! -f "${CDF}" ];
 then
@@ -19,7 +19,7 @@ fi;
 
 cd ${DIR} || exit 1;
 
-function do_install()
+do_install()
 {
     echo "[OK] Installing ${1} into ${DIR}";
     [ -f "${1}" ] && cp -f ${1} ${1}.bak && chmod 600 ${1}.bak;
