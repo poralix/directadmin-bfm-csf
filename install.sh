@@ -4,22 +4,22 @@
 # for www.plugins-da.net
 # ============================================================
 # Version: 0.1.1 Sat Oct  7 12:23:43 +07 2017
-# Last modified: Mon Aug  8 18:42:39 +07 2016
+# Last modified: Sat Oct  7 12:53:35 +07 2017
 # ============================================================
 
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
-DIR="/usr/local/directadmin/scripts/custom/"
+DIR="/usr/local/directadmin/scripts/custom/";
 
 if [ ! -x "${CSF}" ] || [ ! -f "${CDF}" ];
 then
     echo "[NOTICE] CSF/LFD was not found on your server! Installing...";
 
-    cd /usr/local/src
-    wget --no-check-certificate -q https://download.configserver.com/csf.tgz -O csf.tgz
-    tar -xzf csf.tgz
-    cd /usr/local/src/csf
-    sh ./install.sh
+    cd /usr/local/src;
+    wget --no-check-certificate -q https://download.configserver.com/csf.tgz -O csf.tgz;
+    tar -xzf csf.tgz;
+    cd /usr/local/src/csf;
+    sh ./install.sh;
 
     if [ -x "${CSF}" ]; then
         echo "[NOTICE] CSF/LFD was installed! You need to configure /etc/csf/csf.conf";
@@ -31,7 +31,7 @@ fi;
 
 cd ${DIR} || exit 1;
 
-function do_install()
+do_install()
 {
     echo "[OK] Installing ${1} into ${DIR}";
     [ -f "${1}" ] && cp -f ${1} ${1}.bak && chmod 600 ${1}.bak;
