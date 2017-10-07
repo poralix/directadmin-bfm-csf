@@ -3,23 +3,35 @@
 # Written by Alex S Grebenschikov
 # for www.plugins-da.net
 # ============================================================
-# Version: 0.1.0 Mon Aug  8 18:42:39 +07 2016
-# Last modified:                  Nov 12 2016
+# Version: 0.1.1 Sat Oct  7 12:23:43 +07 2017
+# Last modified: Mon Aug  8 18:42:39 +07 2016
 # ============================================================
 
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
-DIR="/usr/local/directadmin/scripts/custom/";
+DIR="/usr/local/directadmin/scripts/custom/"
 
 if [ ! -x "${CSF}" ] || [ ! -f "${CDF}" ];
 then
-    echo "[ERROR] CSF/LFD was not found on your server! Terminating...";
-    exit 1;
+    echo "[NOTICE] CSF/LFD was not found on your server! Installing...";
+
+    cd /usr/local/src
+    wget --no-check-certificate -q https://download.configserver.com/csf.tgz -O csf.tgz
+    tar -xzf csf.tgz
+    cd /usr/local/src/csf
+    sh ./install.sh
+
+    if [ -x "${CSF}" ]; then
+        echo "[NOTICE] CSF/LFD was installed! You need to configure /etc/csf/csf.conf";
+    else
+        echo "[NOTICE] CSF/LFD failed to install! Terminating...";
+        exit 1;
+    fi;
 fi;
 
 cd ${DIR} || exit 1;
 
-do_install()
+function do_install()
 {
     echo "[OK] Installing ${1} into ${DIR}";
     [ -f "${1}" ] && cp -f ${1} ${1}.bak && chmod 600 ${1}.bak;
@@ -39,5 +51,17 @@ do_install "brute_force_notice_ip.sh" "http://files.directadmin.com/services/all
 echo "[OK] Scripts installed!";
 echo "[OK] Make sure that Brute-force monitor is enabled in Directadmin with bruteforce=1";
 echo "[NOTICE] Current value: `/usr/local/directadmin/directadmin c | grep ^bruteforce=`";
-
+echo "";
+echo "[INFO] Suggested settings:
+    bruteforce=1
+    brute_force_log_scanner=1
+    brute_force_scan_apache_logs=2
+    brute_force_time_limit=1200
+    clear_brute_log_time=48
+    hide_brute_force_notifications=1
+    ip_brutecount=30
+    unblock_brute_ip_time=2880
+    user_brutecount=30
+";
+echo "You can change them in Directadmin interface at admin level or in directadmin.conf";
 exit 0;
