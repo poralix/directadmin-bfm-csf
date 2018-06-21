@@ -4,7 +4,7 @@
 # for www.plugins-da.net
 # ============================================================
 # Version: 0.1.3 Tue Jun 12 13:38:56 +07 2018
-# Last modified: Tue Jun 12 13:38:56 +07 2018
+# Last modified: Thu Jun 21 20:03:01 +07 2018
 # ============================================================
 # Versions: 
 #           - 0.1.2 Wed Apr 11 12:40:40 +07 2018
@@ -117,7 +117,7 @@ da_set_conf()
     local option=$1;
     local value=$2;
     echo "[OK] Setting ${option} to ${value} in ${DA_CONF}";
-    grep -q -m1 "^${option}=" ${DA_CONF} && perl -pi -e "s#${option}=.*#${option}=${value}#" ${DA_CONF} || echo "${option}=${value}" >> ${DA_CONF};
+    grep -q -m1 "^${option}=" ${DA_CONF} && perl -pi -e "s#${option}=.*#${option}=${value}#" ${DA_CONF} || echo "${option}=${value}" | tee -a ${DA_CONF};
 }
 
 da_reconfig()
