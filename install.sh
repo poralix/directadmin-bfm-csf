@@ -38,12 +38,12 @@ csf_install()
     [ -d "/usr/local/src/csf" ] || die "[ERROR] CSF/LFD failed to unpack! Terminating..." 2;
     cd /usr/local/src/csf;
 
-    c=$(/etc/csf/csftest.pl | grep -c "RESULT: csf should function on this server");
+    c=$(./csftest.pl | grep -c "RESULT: csf should function on this server");
     if [ "$c" != "1" ]; then
         echo "";
         echo "[WARNING] There are some possible issues with CSF/LFD on your server:";
         echo "Check it now:";
-        /etc/csf/csftest.pl;
+        ./csftest.pl;
         echo "";
         exit 2;
     fi;
