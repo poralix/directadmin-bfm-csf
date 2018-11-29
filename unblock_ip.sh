@@ -1,11 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ============================================================
 # Written by Alex S Grebenschikov
 # for www.plugins-da.net
 # unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD
 # Based on directadmin`s official version
-# Version: 0.1.4 Mon Apr 25 13:55:35 NOVT 2016
-# Last modified: Mon Apr 25 13:55:35 NOVT 2016
+# Version: 0.1.5 Thu Nov 29 15:25:57 +07 2018
+# Last modified: Thu Nov 29 15:25:57 +07 2018
+# ============================================================
+# Version: 0.1.5 Thu Nov 29 15:25:57 +07 2018
+# Changes: Corrected shebang for better compatibilities
 # ============================================================
 # Version: 0.1.4 Mon Apr 25 13:55:35 NOVT 2016
 # Changes: Added removal of banned IP from temporary blocks

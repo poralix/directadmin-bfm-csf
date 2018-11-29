@@ -1,11 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # ====================================================================
 # Written by Alex S Grebenschikov
 # for www.plugins-da.net
 # block_ip.sh script to run BFM (Directadmin) with CSF/LFD
 # ====================================================================
-# Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
-# Last modified: Mon Aug  8 18:06:23 +07 2016
+# Version: 0.1.8 Thu Nov 29 15:25:57 +07 2018
+# Last modified: Thu Nov 29 15:25:57 +07 2018
+# ============================================================
+# Version: 0.1.8 Thu Nov 29 15:25:57 +07 2018
+# Changes: Corrected shebang for better compatibilities
 # ====================================================================
 # Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
 # Bugfix:  A support for TTL=0 (in Directadmin) added
@@ -52,7 +55,7 @@ EXIM_PORTS="25 465 587";
 DOVECOT_PORTS="110 143 993 995";
 DIRECTADMIN_PORTS="2222";
 
-function detect_attacked_service()
+detect_attacked_service()
 {
     # FTP
     c=`echo "${data}" | grep -c ftpd[1,2]=`;
