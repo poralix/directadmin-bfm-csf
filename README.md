@@ -14,4 +14,13 @@ chmod 700 csf-bfm-install.sh
 ./csf-bfm-install.sh
 ```
 
+# Upgrade guide
+
+```
+cd ~
+wget -O csf-bfm-update.sh https://raw.githubusercontent.com/poralix/directadmin-bfm-csf/master/update.sh
+chmod 700 csf-bfm-update.sh
+./csf-bfm-update.sh
+```
+
 Full Instructions can be found here: https://help.poralix.com/articles/how-to-block-ips-with-csf-directadmin-bfm
