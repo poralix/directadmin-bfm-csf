@@ -1,9 +1,15 @@
 # directadmin-bfm-csf
+
 A set of scripts to let Brute Force Monitor in DirectAdmin to block IPs using CSF/LFD
 
 A common method of gaining access over a server is to use a technique called a brute force attack, or dictionary attack. What the attacker will do, is use a script to try and login to an account with every possible password combination. This tends to require tens of thousands of login attempts, but eventually, the right combination will be found, and they can login normally.
 
 To prevent this, we can use a brute force login detection system in DirectAdmin, so called BFM (Brute Force Monitor).
+
+# Release details
+
+Version: 0.1.4
+Last updated: Tue May 28 03:19:25 +07 2019
 
 # Installation guide
 
@@ -58,5 +64,3 @@ USE_PORT_SELECTED_BLOCK="0";
 ```
 
 in `/root/directadmin-bfm-csf.conf`. Create the file if it's missing.
-
-
