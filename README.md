@@ -1,6 +1,6 @@
 # directadmin-bfm-csf
 
-A set of scripts to let Brute Force Monitor in DirectAdmin to block IPs using CSF/LFD
+A set of scripts to couple DirectAdmin's Brute Force Monitor with CSF/LFD. DirectAdmin will search for brute-force attacks in logs and tell CSF to block them.
 
 A common method of gaining access over a server is to use a technique called a brute force attack, or dictionary attack. What the attacker will do, is use a script to try and login to an account with every possible password combination. This tends to require tens of thousands of login attempts, but eventually, the right combination will be found, and they can login normally.
 
