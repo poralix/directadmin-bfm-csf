@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# Written by Alex S Grebenschikov
-# for www.plugins-da.net
+# Written by Alex S Grebenschikov for www.plugins-da.net
 # unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD
 # Based on directadmin`s official version
 # Version: 0.1.6 Tue May 28 01:30:02 +07 2019
@@ -99,10 +98,10 @@ fi;
 
 if [ "${UNBLOCKED}" -gt "0" ];
 then
-    echo "[OK] The IP ${ip} was unblocked";
+    echo -n "[OK] The IP ${ip} was unblocked";
     exit 0;
 else
-    echo "[WARNING] The IP ${ip} is not blocked. Terminating...";
+    echo -n "[WARNING] The IP ${ip} is not blocked. Terminating...";
     exit 3;
 fi;
 

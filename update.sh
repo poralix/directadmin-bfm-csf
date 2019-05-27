@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # ============================================================
-# Written by Alex S Grebenschikov (www.poralix.com)
-# for www.plugins-da.net
+# Written by Alex S Grebenschikov for www.plugins-da.net
 # ============================================================
-# Version: 0.1.4 Thu Nov 29 15:25:57 +07 2018
-# Last modified: Thu Nov 29 15:25:57 +07 2018
+# Version: 0.1.5 Tue May 28 02:55:59 +07 2019
+# Last modified: Tue May 28 02:55:59 +07 2019
 # ============================================================
 # Version: 0.1.4 Thu Nov 29 15:25:57 +07 2018
 # Changes: Corrected shebang for better compatibilities
@@ -17,22 +16,22 @@
 
 CSF="/usr/sbin/csf";
 DIR="/usr/local/directadmin/scripts/custom/";
-DA_CONF="/usr/local/directadmin/conf/directadmin.conf";
-CSF_CONF="/etc/csf/csf.conf";
-CSF_PIGNORE="/etc/csf/csf.pignore";
 
 do_update()
 {
     echo "[OK] Updating in ${DIR}${1}";
-    [ -f "${1}" ] && cp -f ${1} ${1}.bak && chmod 600 ${1}.bak;
-    wget --no-check-certificate -q -O ${1} ${2};
-    chmod 700 ${1};
-    chown diradmin:diradmin ${1};
+    if [ -f "${1}" ]; then
+        cp -f "${1}" "${1}.bak"
+        chmod 600 "${1}.bak";
+    fi;
+    wget --no-check-certificate -q -O "${1}" "${2}";
+    chmod 700 "${1}";
+    chown diradmin:diradmin "${1}";
 }
 
 die()
 {
-    echo "$1" echo ""; exit $2;
+    echo "$1" echo ""; exit "$2";
 }
 
 [ -x "${CSF}" ] || csf_install;
