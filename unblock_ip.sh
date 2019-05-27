@@ -4,8 +4,11 @@
 # for www.plugins-da.net
 # unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD
 # Based on directadmin`s official version
-# Version: 0.1.5 Thu Nov 29 15:25:57 +07 2018
+# Version: 0.1.6 Tue May 28 01:30:02 +07 2019
 # Last modified: Thu Nov 29 15:25:57 +07 2018
+# ============================================================
+# Version: 0.1.6 Tue May 28 01:30:02 +07 2019
+# Changes: Support for an external config and debug added
 # ============================================================
 # Version: 0.1.5 Thu Nov 29 15:25:57 +07 2018
 # Changes: Corrected shebang for better compatibilities
@@ -27,14 +30,20 @@ CSF_GREP_API_CALL=0; # SET TO 1 TO USE API CALL TO CSF
                      # SET TO 0 (ZERO) TO GREP A FILE DIRECTLY
                      # 1 - MORE ACCURATE, USE csf
                      # 0 - MORE SPEEDY, USE egrep
+DEBUG=0;
 # ============================================================
+
+CONF_FILE="/root/directadmin-bfm-csf.conf";
+
+if [ -f "${CONF_FILE}" ]; then
+    source "${CONF_FILE}";
+fi;
 
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
 CDTF="/var/lib/csf/csf.tempban";
 
-BF=/root/blocked_ips.txt;
-EF=/root/exempt_ips.txt;
+BF="/root/blocked_ips.txt";
 UNBLOCKED=0;
 
 if [ -z "${ip}" ];
@@ -49,6 +58,11 @@ then
     exit 2;
 fi;
 
+de()
+{
+    [ "${DEBUG}" == "1" ] && echo "$1";
+}
+
 ##
 ## IN SOME CASES THE IP MIGHT BE MISSING IN CSF/LFD
 ## AND STILL EXIST IN /root/blocked_ips.txt
@@ -56,30 +70,30 @@ fi;
 ## TO LET DIRECTADMIN DO ITS JOB
 ## AND AVOID LOOPS
 ##
-c=`egrep "^${ip}(=|$)" ${BF} -c`
+c=`egrep -c "^${ip}(=|$)" "${BF}"`;
 if [ "${c}" -gt "0" ];
 then
-    echo "[OK] The IP ${ip} was found as blocked in ${BF}<br>";
-    cat ${BF} | egrep -v "^${ip}(=|$)" > ${BF}.temp
-    mv ${BF}.temp ${BF}
+    de "[DEBUG] The IP ${ip} was found in ${BF}";
+    egrep -v "^${ip}(=|$)" "${BF}" > "${BF}.temp";
+    mv "${BF}.temp" "${BF}";
     UNBLOCKED=1;
 fi;
 
 if [ "${CSF_GREP_API_CALL}" == "0" ];
 then
     # MORE SPEEDY
-    egrep "^${ip}($|\s)" ${CDF} -q || grep "|${ip}|" ${CDTF} -q;
+    egrep -q "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
     RVAL=$?;
     c=0;
 else
     # MORE ACCURATE
-    c=`${CSF} -g "${ip}" | egrep 'csf.deny|Temporary Blocks' -c`;
+    c=$(${CSF} -g "${ip}" | egrep -c 'csf.deny|Temporary Blocks');
 fi;
 if [ "${c}" -gt "0" ] || [ "${RVAL}" == "0" ];
 then
-    echo "[OK] The IP ${ip} was found as blocked in CSF/LFD (API_CALL=${CSF_GREP_API_CALL})<br>";
-    ${CSF} -dr ${ip} >/dev/null 2>&1; # Permament block list
-    ${CSF} -tr ${ip} >/dev/null 2>&1; # Temporary block list
+    de "[DEBUG] The IP ${ip} was found as blocked in CSF/LFD (API_CALL=${CSF_GREP_API_CALL})";
+    ${CSF} -dr "${ip}" >/dev/null 2>&1; # Permament block list
+    ${CSF} -tr "${ip}" >/dev/null 2>&1; # Temporary block list
     UNBLOCKED=1;
 fi;
 
