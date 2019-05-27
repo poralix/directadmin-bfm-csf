@@ -8,8 +8,8 @@ To prevent this, we can use a brute force login detection system in DirectAdmin,
 
 # Release details
 
-Version: 0.1.4
-Last updated: Tue May 28 03:19:25 +07 2019
+- Version: 0.1.4
+- Last updated: Tue May 28 03:19:25 +07 2019
 
 # Installation guide
 
