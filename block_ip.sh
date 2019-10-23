@@ -3,9 +3,13 @@
 # Written by Alex S Grebenschikov for www.plugins-da.net
 # block_ip.sh script to run BFM (Directadmin) with CSF/LFD
 # ====================================================================
-# Version: 0.1.9 Tue May 28 02:20:21 +07 2019
-# Last modified: Thu Nov 29 15:25:57 +07 2018
-# ============================================================
+# Version: 0.2.0 Wed Oct 23 16:19:54 +07 2019
+# Last modified: Wed Oct 23 16:19:54 +07 2019
+# ====================================================================
+# Version: 0.2.0 Wed Oct 23 16:19:54 +07 2019
+# Changes: Multiports are now supported. DirectAdmin sends a list of
+#          attacked services in a single line
+# ====================================================================
 # Version: 0.1.9 Tue May 28 02:20:21 +07 2019
 # Changes: Support for an external config file added, 
 #          Normalized logging
@@ -72,50 +76,50 @@ de()
 
 detect_attacked_service()
 {
+    local loc_block_ports="";
     # FTP
     c=$(echo "${data}" | grep -c "ftpd[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${FTP_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${FTP_PORTS}";
     fi;
 
     # SSH
     c=$(echo "${data}" | grep -c "ssh[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${SSH_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${SSH_PORTS}";
     fi;
 
     # WEB
     c=$(echo "${data}" | grep -c "wordpress[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${WEB_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${WEB_PORTS}";
     fi;
 
     # EXIM
     c=$(echo "${data}" | grep -c "exim[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${EXIM_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${EXIM_PORTS}";
     fi;
 
     # DOVECOT
     c=$(echo "${data}" | grep -c "dovecot[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${DOVECOT_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${DOVECOT_PORTS}";
     fi;
 
     # DIRECTADMIN
     c=$(echo "${data}" | grep -c "directadmin[0-9]=");
     if [ "${c}" -gt "0" ]; then
-        echo "${DIRECTADMIN_PORTS}";
-        return 0;
+        loc_block_ports="${loc_block_ports} ${DIRECTADMIN_PORTS}";
     fi;
 
-    echo "0";
-    return 1;
+    if [ -z "${loc_block_ports}" ]; then
+        echo "0";
+        return 1;
+    else
+        echo "${loc_block_ports}";
+        return 0;
+    fi;
 }
 
 if [ -z "${ip}" ];
