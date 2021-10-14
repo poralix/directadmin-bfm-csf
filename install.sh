@@ -113,8 +113,9 @@ csf_reconfig()
         yesno="n";
         echo -n "Please confirm update CSF Firewall, SSH Port 22 to ${SSHD_PORT} ? (y/n):";
         read yesno;
-	    if [ "$yesno" = "y" ]; then        
+	if [ "$yesno" = "y" ]; then        
             sed -E -i "/^(TCP|TCP6)_(IN|OUT).*,22/s/,22,/,${SSHD_PORT},/g" "${CSF_CONF}";
+            perl -pi -e 's/^PORTS_sshd = "22"/PORTS_sshd = "${SSHD_PORT}"/' "${CSF_CONF}";  
         fi
     fi
     
