@@ -1,33 +1,40 @@
 #!/usr/bin/env bash
-# ====================================================================
-# Written by Alex S Grebenschikov for www.plugins-da.net
-# block_ip.sh script to run BFM (Directadmin) with CSF/LFD
-# ====================================================================
-# Version: 0.2.0 Wed Oct 23 16:19:54 +07 2019
-# Last modified: Wed Oct 23 16:19:54 +07 2019
-# ====================================================================
+# =====================================================================================
+#  DirectAdmin-BFM-CSF:
+#    Version: 0.1.5
+#    Last updated: Sat Jul  2 20:55:32 +07 2022
+# =====================================================================================
+#  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
+#  block_ip.sh script to run BFM (Directadmin) with CSF/LFD
+# =====================================================================================
+# Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
+# Last modified: Sat Jul  2 18:37:47 +07 2022
+# =====================================================================================
+# Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
+# Changes: Extended cases for HTTP/HTTPs webservices blocks
+# =====================================================================================
 # Version: 0.2.0 Wed Oct 23 16:19:54 +07 2019
 # Changes: Multiports are now supported. DirectAdmin sends a list of
 #          attacked services in a single line
-# ====================================================================
+# =====================================================================================
 # Version: 0.1.9 Tue May 28 02:20:21 +07 2019
 # Changes: Support for an external config file added, 
 #          Normalized logging
-# ============================================================
+# =====================================================================================
 # Version: 0.1.8 Thu Nov 29 15:25:57 +07 2018
 # Changes: Corrected shebang for better compatibilities
-# ====================================================================
+# =====================================================================================
 # Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
 # Bugfix:  A support for TTL=0 (in Directadmin) added
-# ====================================================================
+# =====================================================================================
 # Version: 0.1.5 Mon Apr 25 11:30:01 NOVT 2016
 # Changes: A switcher USE_PORT_SELECTED_BLOCK added
-# ====================================================================
+# =====================================================================================
 # Version: 0.1.4 Thu Jan 14 19:20:39 NOVT 2016
 # Changes: grep replaced with egrep to support old format of
 #          /root/block_ips.txt, when IP comes w/out date.
 #          A switcher CSF_GREP_API_CALL added
-# ====================================================================
+# =====================================================================================
 #
 USE_PORT_SELECTED_BLOCK=1;  # SET TO 1 OR 0
                             # 1: TO BAN ACCESS ONLY TO A PORT WHICH
@@ -90,7 +97,7 @@ detect_attacked_service()
     fi;
 
     # WEB
-    c=$(echo "${data}" | grep -c "wordpress[0-9]=");
+    c=$(echo "${data}" | grep -Ec "(wordpress|webserver|mod_security)[0-9]="); #"
     if [ "${c}" -gt "0" ]; then
         loc_block_ports="${loc_block_ports} ${WEB_PORTS}";
     fi;
