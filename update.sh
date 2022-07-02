@@ -47,7 +47,7 @@ do_update "block_404.sh" "https://files.plugins-da.net/dl/block_404.sh.txt";
 do_update "block_ip.sh" "https://files.plugins-da.net/dl/csf_block_ip.sh.txt";
 do_update "unblock_ip.sh" "https://files.plugins-da.net/dl/csf_unblock_ip.sh.txt";
 do_update "show_blocked_ips.sh" "https://files.plugins-da.net/dl/csf_show_blocked_ips.sh.txt";
-do_update "brute_force_notice_ip.sh" "https://files.directadmin.com/services/all/brute_force_notice_ip.sh";
+do_update "brute_force_notice_ip.sh" "https://files.plugins-da.net/dl/brute_force_notice_ip.sh.txt";
 
 [ -f "/root/blocked_ips.txt" ] || touch /root/blocked_ips.txt;
 [ -f "/root/exempt_ips.txt" ] || touch /root/exempt_ips.txt;
