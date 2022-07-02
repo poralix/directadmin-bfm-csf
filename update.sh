@@ -6,8 +6,8 @@
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 # =====================================================================================
-# Version: 0.1.5 Tue May 28 02:55:59 +07 2019
-# Last modified: Tue May 28 02:55:59 +07 2019
+# File Version: 0.1.6 $ Sat Jul  2 20:55:32 +07 2022
+# Last modified: Sat Jul  2 20:55:32 +07 2022
 # =====================================================================================
 # Version: 0.1.4 Thu Nov 29 15:25:57 +07 2018
 # Changes: Corrected shebang for better compatibilities
@@ -43,10 +43,11 @@ die()
 [ -x "/usr/local/directadmin/directadmin" ] || die "[ERROR] Directadmin not found! You should install it first!" 1;
 cd "${DIR}" || die "[ERROR] Could not change directory to ${DIR}" 1;
 
-do_update "block_ip.sh" "http://files.plugins-da.net/dl/csf_block_ip.sh.txt";
-do_update "unblock_ip.sh" "http://files.plugins-da.net/dl/csf_unblock_ip.sh.txt";
-do_update "show_blocked_ips.sh" "http://files.plugins-da.net/dl/csf_show_blocked_ips.sh.txt";
-do_update "brute_force_notice_ip.sh" "http://files.directadmin.com/services/all/brute_force_notice_ip.sh";
+do_update "block_404.sh" "https://files.plugins-da.net/dl/block_404.sh.txt";
+do_update "block_ip.sh" "https://files.plugins-da.net/dl/csf_block_ip.sh.txt";
+do_update "unblock_ip.sh" "https://files.plugins-da.net/dl/csf_unblock_ip.sh.txt";
+do_update "show_blocked_ips.sh" "https://files.plugins-da.net/dl/csf_show_blocked_ips.sh.txt";
+do_update "brute_force_notice_ip.sh" "https://files.directadmin.com/services/all/brute_force_notice_ip.sh";
 
 [ -f "/root/blocked_ips.txt" ] || touch /root/blocked_ips.txt;
 [ -f "/root/exempt_ips.txt" ] || touch /root/exempt_ips.txt;
