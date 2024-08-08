@@ -7,6 +7,9 @@
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  block_ip.sh script to run BFM (Directadmin) with CSF/LFD
 # =====================================================================================
+# Script Version: 0.2.2 Thu Aug  8 11:45:35 +07 2024
+# Changes: Added date of a block to comments for CSF
+# =====================================================================================
 # Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
 # Last modified: Sat Jul  2 18:37:47 +07 2022
 # =====================================================================================
@@ -248,11 +251,11 @@ fi;
 TF=$(mktemp);
 if [ -z "${BLOCK_PORTS}" ];
 then
-    ${CSF} -d "${ip}" "Blocked with Directadmin Brute Force Manager" > "${TF}" 2>&1;
+    ${CSF} -d "${ip}" "Blocked with Directadmin BFM on $(date -R)" > "${TF}" 2>&1;
 else
     for port in ${BLOCK_PORTS};
     do
-        ${CSF} --tempdeny "${ip}" "${TTL}" -p "${port}" -d inout "Blocked port ${port} with Directadmin Brute Force Manager" >> "${TF}" 2>&1;
+        ${CSF} --tempdeny "${ip}" "${TTL}" -p "${port}" -d inout "Blocked port ${port} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
     done;
 fi;
 
