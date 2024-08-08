@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.5
-#    Last updated: Sat Jul  2 20:55:32 +07 2022
+#    Version: 0.1.6
+#    Last updated: Thu Aug  8 17:00:49 +07 2024
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD

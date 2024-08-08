@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.5
-#    Last updated: Sat Jul  2 20:55:32 +07 2022
+#    Version: 0.1.6
+#    Last updated: Thu Aug  8 17:00:49 +07 2024
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  block_ip.sh script to run BFM (Directadmin) with CSF/LFD
 # =====================================================================================
-# Script Version: 0.2.2 Thu Aug  8 11:45:35 +07 2024
-# Changes: Added date of a block to comments for CSF
+# Script Version: 0.2.2 Thu Aug  8 16:40:11 +07 2024
+# Changes: Use multiport function of CSF/LFD
+#          Added date of a block to comments for CSF
 # =====================================================================================
 # Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
 # Last modified: Sat Jul  2 18:37:47 +07 2022
@@ -78,6 +79,7 @@ CDF="/etc/csf/csf.deny";
 CDTF="/var/lib/csf/csf.tempban";
 
 CSF="/usr/sbin/csf";
+SED="$(which sed)";
 
 de()
 {
@@ -86,7 +88,8 @@ de()
 
 detect_attacked_service()
 {
-    local loc_block_ports="";
+    local loc_block_ports;
+
     # FTP
     c=$(echo "${data}" | grep -c "ftpd[0-9]=");
     if [ "${c}" -gt "0" ]; then
@@ -122,6 +125,16 @@ detect_attacked_service()
     if [ "${c}" -gt "0" ]; then
         loc_block_ports="${loc_block_ports} ${DIRECTADMIN_PORTS}";
     fi;
+
+    # REMOVE LEADING, TRAILING, DOUBLE WHITESPACES
+    if [ -x "${SED}" ]; then
+        loc_block_ports="$(sed -re 's/^[[:blank:]]+|[[:blank:]]+$//g' -e 's/[[:blank:]]+/ /g' <<< ${loc_block_ports})";
+    else
+        loc_block_ports="$(echo ${loc_block_ports})";
+    fi;
+
+    # REPLACE WHITESPACES WITH DOTS
+    loc_block_ports="${loc_block_ports// /,}";
 
     if [ -z "${loc_block_ports}" ]; then
         echo "0";
@@ -253,10 +266,7 @@ if [ -z "${BLOCK_PORTS}" ];
 then
     ${CSF} -d "${ip}" "Blocked with Directadmin BFM on $(date -R)" > "${TF}" 2>&1;
 else
-    for port in ${BLOCK_PORTS};
-    do
-        ${CSF} --tempdeny "${ip}" "${TTL}" -p "${port}" -d inout "Blocked port ${port} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
-    done;
+    ${CSF} --tempdeny "${ip}" "${TTL}" -p "${BLOCK_PORTS}" -d inout "Blocked port ${BLOCK_PORTS} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
 fi;
 
 c=$(grep -c " DENY_IP_LIMIT " "${TF}");

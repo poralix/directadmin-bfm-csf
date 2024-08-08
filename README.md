@@ -8,8 +8,8 @@ To prevent this, we can use a brute force login detection system in DirectAdmin,
 
 # Release details
 
-- Version: 0.1.5
-- Last updated: Sat Jul  2 20:55:32 +07 2022
+- Version: 0.1.6
+- Last updated: Thu Aug  8 17:00:49 +07 2024
 
 # Installation guide
 
@@ -64,3 +64,12 @@ USE_PORT_SELECTED_BLOCK="0";
 ```
 
 in `/root/directadmin-bfm-csf.conf`. Create the file if it's missing.
+
+# Changelog
+
+Version: 0.1.6
+
+- block_404.sh: Added date of a block to comments for CSF
+- block_ip.sh: Added date of a block to comments for CSF
+- block_ip.sh: Use multiport function of CSF/LFD
+- unblock_ip.sh: Remove an IP from the temporary IP ban list only
