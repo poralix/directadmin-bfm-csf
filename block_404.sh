@@ -14,6 +14,9 @@
 #  Should be run with cron:
 #  */5 * * * * root /usr/local/directadmin/scripts/custom/block_404.sh >/dev/null 2>&1
 # =====================================================================================
+# Script Version: 0.2.2 Thu Aug  8 11:45:35 +07 2024
+# Changes: Added date of a block to comments for CSF
+# =====================================================================================
 #  File version: 0.2.1 Sat Jul  2 15:52:48 +07 2022
 #  Last modified: Sat Jul  2 15:52:48 +07 2022
 # =====================================================================================
@@ -58,9 +61,9 @@ then
             then
                 echo "[NOTICE] Using CSF to blacklist IP ${ip} for vulnerability scanning with ${count} requests with HTTP/404";
                 port=80;
-                ${CSF_SCRIPT} --tempdeny "${ip}" "${ttl}" -p "${port}" -d inout "Blocked port ${port} for vulnerability scanning";
+                ${CSF_SCRIPT} --tempdeny "${ip}" "${ttl}" -p "${port}" -d inout "Blocked port ${port} for vulnerability scanning on $(date -R)";
                 port=443;
-                ${CSF_SCRIPT} --tempdeny "${ip}" "${ttl}" -p "${port}" -d inout "Blocked port ${port} for vulnerability scanning";
+                ${CSF_SCRIPT} --tempdeny "${ip}" "${ttl}" -p "${port}" -d inout "Blocked port ${port} for vulnerability scanning on $(date -R)";
             else
                 echo "[NOTICE] Manuall action is required to blacklist IP ${ip} for vulnerability scanning with ${count} requests with HTTP/404";
             fi;
