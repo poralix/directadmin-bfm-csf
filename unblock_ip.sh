@@ -8,8 +8,8 @@
 #  unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD
 #  Based on directadmin`s official version
 # =====================================================================================
-#  Version: 0.1.6 Tue May 28 01:30:02 +07 2019
-#  Last modified: Thu Nov 29 15:25:57 +07 2018
+# Script Version: 0.1.7 Thu Aug  8 11:45:35 +07 2024
+# Changes: Remove an IP from the temporary IP ban list only (excluding allow list)
 # =====================================================================================
 # Version: 0.1.6 Tue May 28 01:30:02 +07 2019
 # Changes: Support for an external config and debug added
@@ -96,8 +96,8 @@ fi;
 if [ "${c}" -gt "0" ] || [ "${RVAL}" == "0" ];
 then
     de "[DEBUG] The IP ${ip} was found as blocked in CSF/LFD (API_CALL=${CSF_GREP_API_CALL})";
-    ${CSF} -dr "${ip}" >/dev/null 2>&1; # Permament block list
-    ${CSF} -tr "${ip}" >/dev/null 2>&1; # Temporary block list
+    ${CSF} -dr "${ip}" >/dev/null 2>&1; # Unblock an IP and remove from /etc/csf/csf.deny
+    ${CSF} -trd "${ip}" >/dev/null 2>&1; # Remove an IP from the temporary IP ban list only
     UNBLOCKED=1;
 fi;
 
