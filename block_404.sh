@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.6
-#    Last updated: Thu Aug  8 17:00:49 +07 2024
+#    Version: 0.1.7
+#    Last updated: Thu Feb 27 00:54:42 +07 2025
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  block_404.sh script to run with BFM (Directadmin) or CSF/LFD
@@ -14,13 +14,7 @@
 #  Should be run with cron:
 #  */5 * * * * root /usr/local/directadmin/scripts/custom/block_404.sh >/dev/null 2>&1
 # =====================================================================================
-# Script Version: 0.2.2 Thu Aug  8 11:45:35 +07 2024
-# Changes: Added date of a block to comments for CSF
-# =====================================================================================
-#  File version: 0.2.1 Sat Jul  2 15:52:48 +07 2022
-#  Last modified: Sat Jul  2 15:52:48 +07 2022
-# =====================================================================================
-
+#
 TMP_FILE=$(mktemp /home/tmp/block_404.XXXXXXXXXX);
 BLOCK_IP_AFTER_404_HITS=1000;
 BLOCK_SCRIPT="/usr/local/directadmin/scripts/custom/block_ip.sh";

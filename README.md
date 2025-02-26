@@ -8,8 +8,8 @@ To prevent this, we can use a brute force login detection system in DirectAdmin,
 
 # Release details
 
-- Version: 0.1.6
-- Last updated: Thu Aug  8 17:00:49 +07 2024
+- Version: 0.1.7
+- Last updated: Thu Feb 27 00:54:42 +07 2025
 
 # Installation guide
 
@@ -66,6 +66,11 @@ USE_PORT_SELECTED_BLOCK="0";
 in `/root/directadmin-bfm-csf.conf`. Create the file if it's missing.
 
 # Changelog
+
+Version: 0.1.7
+
+- A support of Cluster mode of CSF/LFD is now added
+- Cleaned comments from files headers
 
 Version: 0.1.6
 

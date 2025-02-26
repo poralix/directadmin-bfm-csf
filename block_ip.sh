@@ -1,43 +1,11 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.6
-#    Last updated: Thu Aug  8 17:00:49 +07 2024
+#    Version: 0.1.7
+#    Last updated: Thu Feb 27 00:54:42 +07 2025
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  block_ip.sh script to run BFM (Directadmin) with CSF/LFD
-# =====================================================================================
-# Script Version: 0.2.2 Thu Aug  8 16:40:11 +07 2024
-# Changes: Use multiport function of CSF/LFD
-#          Added date of a block to comments for CSF
-# =====================================================================================
-# Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
-# Last modified: Sat Jul  2 18:37:47 +07 2022
-# =====================================================================================
-# Version: 0.2.1 Sat Jul  2 18:37:47 +07 2022
-# Changes: Extended cases for HTTP/HTTPs webservices blocks
-# =====================================================================================
-# Version: 0.2.0 Wed Oct 23 16:19:54 +07 2019
-# Changes: Multiports are now supported. DirectAdmin sends a list of
-#          attacked services in a single line
-# =====================================================================================
-# Version: 0.1.9 Tue May 28 02:20:21 +07 2019
-# Changes: Support for an external config file added, 
-#          Normalized logging
-# =====================================================================================
-# Version: 0.1.8 Thu Nov 29 15:25:57 +07 2018
-# Changes: Corrected shebang for better compatibilities
-# =====================================================================================
-# Version: 0.1.7 Mon Aug  8 18:06:23 +07 2016
-# Bugfix:  A support for TTL=0 (in Directadmin) added
-# =====================================================================================
-# Version: 0.1.5 Mon Apr 25 11:30:01 NOVT 2016
-# Changes: A switcher USE_PORT_SELECTED_BLOCK added
-# =====================================================================================
-# Version: 0.1.4 Thu Jan 14 19:20:39 NOVT 2016
-# Changes: grep replaced with egrep to support old format of
-#          /root/block_ips.txt, when IP comes w/out date.
-#          A switcher CSF_GREP_API_CALL added
 # =====================================================================================
 #
 USE_PORT_SELECTED_BLOCK=1;  # SET TO 1 OR 0

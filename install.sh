@@ -1,23 +1,12 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.5
-#    Last updated: Sat Jul  2 20:55:32 +07 2022
+#    Version: 0.1.7
+#    Last updated: Thu Feb 27 00:54:42 +07 2025
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 # =====================================================================================
-# Version: 0.1.5 Tue May 28 03:07:59 +07 2019
-# Last modified: Tue May 28 03:07:59 +07 2019
-# =====================================================================================
-# Version: 0.1.4 Thu Nov 29 15:25:57 +07 2018
-# Changes: Corrected shebang for better compatibilities
-# =====================================================================================
-# Versions: 
-#           - 0.1.3 Tue Jun 12 13:38:56 +07 2018
-#           - 0.1.2 Wed Apr 11 12:40:40 +07 2018
-#           - 0.1.1 Sat Oct  7 12:23:43 +07 2017
-# =====================================================================================
-
+#
 CSF="/usr/sbin/csf";
 DIR="/usr/local/directadmin/scripts/custom/";
 DA_CONF="/usr/local/directadmin/conf/directadmin.conf";

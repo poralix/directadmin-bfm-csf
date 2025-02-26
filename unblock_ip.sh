@@ -1,33 +1,13 @@
 #!/usr/bin/env bash
 # =====================================================================================
 #  DirectAdmin-BFM-CSF:
-#    Version: 0.1.6
-#    Last updated: Thu Aug  8 17:00:49 +07 2024
+#    Version: 0.1.7
+#    Last updated: Thu Feb 27 00:54:42 +07 2025
 # =====================================================================================
 #  Written by Alex S Grebenschikov for www.plugins-da.net, www.poralix.com
 #  unblock_ip.sh script to run Directadmin`s BFM with CSF/LFD
 #  Based on directadmin`s official version
 # =====================================================================================
-# Script Version: 0.1.7 Thu Aug  8 11:45:35 +07 2024
-# Changes: Remove an IP from the temporary IP ban list only (excluding allow list)
-# =====================================================================================
-# Version: 0.1.6 Tue May 28 01:30:02 +07 2019
-# Changes: Support for an external config and debug added
-# =====================================================================================
-# Version: 0.1.5 Thu Nov 29 15:25:57 +07 2018
-# Changes: Corrected shebang for better compatibilities
-# =====================================================================================
-# Version: 0.1.4 Mon Apr 25 13:55:35 NOVT 2016
-# Changes: Added removal of banned IP from temporary blocks
-# =====================================================================================
-# Version: 0.1.3 Thu Jan 14 19:20:39 NOVT 2016
-# Changes: grep replaced with egrep to support old format of
-#          /root/block_ips.txt, when IP comes w/out date.
-#          A switcher CSF_GREP_API_CALL added 
-# =====================================================================================
-# Version: 0.1.2 Sun May 17 16:37:58 NOVT 2015
-# =====================================================================================
-# Version: 0.1.1 Tue Dec  9 23:22:37 NOVT 2014
 #
 CSF_GREP_API_CALL=0;     # SET TO 1 TO USE API CALL TO CSF
                          # WHEN SEARCHING AN IP AGAINST BLOCKLIST
