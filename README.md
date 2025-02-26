@@ -37,6 +37,7 @@ Whenever you need to change the defaults:
 
 
 ```
+CSF_USE_CLUSTER_BLOCK="0"
 USE_PORT_SELECTED_BLOCK="1";
 CSF_GREP_API_CALL="0";
 DEBUG="0";
