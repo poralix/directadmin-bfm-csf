@@ -100,8 +100,20 @@ csf_reconfig()
     echo "";
     SSHD_PORT=$(grep "^Port" /etc/ssh/sshd_config | tail -1 | awk '{print $2}');
     [ -n "${SSHD_PORT}" ] || SSHD_PORT=22;
+    echo "";
+    
+    if [ "${SSHD_PORT}" != "22" ] && [ -s /etc/ssh/sshd_config ] && [ `grep -c '^Port ' /etc/ssh/sshd_config` -gt 0 ]; then
+        yesno="n";
+        echo -n "Please confirm update CSF Firewall, SSH Port 22 to ${SSHD_PORT} ? (y/n):";
+        read yesno;
+	if [ "$yesno" = "y" ]; then        
+            sed -E -i "/^(TCP|TCP6)_(IN|OUT).*,22/s/,22,/,${SSHD_PORT},/g" "${CSF_CONF}";
+            perl -pi -e 's/^PORTS_sshd = "22"/PORTS_sshd = "${SSHD_PORT}"/' "${CSF_CONF}";  
+        fi
+    fi
+    
+    echo "";
     echo "[IMPORTANT] Your SSH PORT is ${SSHD_PORT}, it should be listed below as allowed";
-
     echo "";
     echo "[OK] A list of opened ports in firewall";
     grep -E "^(UD|TC)P(|6)_(IN|OUT)" "${CSF_CONF}" --color;
