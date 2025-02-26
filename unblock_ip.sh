@@ -29,11 +29,15 @@
 # =====================================================================================
 # Version: 0.1.1 Tue Dec  9 23:22:37 NOVT 2014
 #
-CSF_GREP_API_CALL=0; # SET TO 1 TO USE API CALL TO CSF
-                     # WHEN SEARCHING AN IP AGAINST BLOCKLIST
-                     # SET TO 0 (ZERO) TO GREP A FILE DIRECTLY
-                     # 1 - MORE ACCURATE, USE csf
-                     # 0 - MORE SPEEDY, USE egrep
+CSF_GREP_API_CALL=0;     # SET TO 1 TO USE API CALL TO CSF
+                         # WHEN SEARCHING AN IP AGAINST BLOCKLIST
+                         # SET TO 0 (ZERO) TO GREP A FILE DIRECTLY
+                         # 1 - MORE ACCURATE, USE csf
+                         # 0 - MORE SPEEDY, USE grep
+
+CSF_USE_CLUSTER_BLOCK=1; # SET TO 1 TO USE API CALL TO CSF WITH CLUSTER MODE
+                         # SET TO 0 (ZERO) TO USE REGULAR CSF API CALLS
+
 DEBUG=0;
 # =====================================================================================
 
@@ -46,6 +50,7 @@ fi;
 CSF="/usr/sbin/csf";
 CDF="/etc/csf/csf.deny";
 CDTF="/var/lib/csf/csf.tempban";
+CCF="/etc/csf/csf.conf";
 
 BF="/root/blocked_ips.txt";
 UNBLOCKED=0;
@@ -74,11 +79,11 @@ de()
 ## TO LET DIRECTADMIN DO ITS JOB
 ## AND AVOID LOOPS
 ##
-c=`egrep -c "^${ip}(=|$)" "${BF}"`;
+c=`grep -Ec "^${ip}(=|$)" "${BF}"`;
 if [ "${c}" -gt "0" ];
 then
     de "[DEBUG] The IP ${ip} was found in ${BF}";
-    egrep -v "^${ip}(=|$)" "${BF}" > "${BF}.temp";
+    grep -Ev "^${ip}(=|$)" "${BF}" > "${BF}.temp";
     mv "${BF}.temp" "${BF}";
     UNBLOCKED=1;
 fi;
@@ -86,18 +91,32 @@ fi;
 if [ "${CSF_GREP_API_CALL}" == "0" ];
 then
     # MORE SPEEDY
-    egrep -q "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
+    grep -Eq "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
     RVAL=$?;
     c=0;
 else
     # MORE ACCURATE
-    c=$(${CSF} -g "${ip}" | egrep -c 'csf.deny|Temporary Blocks');
+    c=$(${CSF} -g "${ip}" | grep -Ec 'csf.deny|Temporary Blocks');
 fi;
 if [ "${c}" -gt "0" ] || [ "${RVAL}" == "0" ];
 then
-    de "[DEBUG] The IP ${ip} was found as blocked in CSF/LFD (API_CALL=${CSF_GREP_API_CALL})";
-    ${CSF} -dr "${ip}" >/dev/null 2>&1; # Unblock an IP and remove from /etc/csf/csf.deny
-    ${CSF} -trd "${ip}" >/dev/null 2>&1; # Remove an IP from the temporary IP ban list only
+    # CHECK WHETHER THE CLUSTER MODE IS ENABLED
+    if [ "${CSF_USE_CLUSTER_BLOCK}" == "1" ];
+    then
+        # IS IT ENABLED IN CSF/LFD?
+        CSF_USE_CLUSTER_BLOCK=$(grep "^CLUSTER_CONFIG" "${CCF}" | cut -d= -f2 | xargs echo);
+    fi;
+
+    # CHECK THE CLUSTER MODE THE SECOND TIME
+    if [ "${CSF_USE_CLUSTER_BLOCK}" == "1" ];
+    then
+        de "[DEBUG] Unblocking the IP ${ip} in CSF/LFD Cluster (API_CALL=${CSF_GREP_API_CALL})";
+        ${CSF} --crm "${ip}" >/dev/null 2>&1; # Unblock an IP and remove from each remote /etc/csf/csf.deny and temporary list
+    else
+        de "[DEBUG] Unblocking the IP ${ip} in CSF/LFD (API_CALL=${CSF_GREP_API_CALL})";
+        ${CSF} -dr "${ip}" >/dev/null 2>&1; # Unblock an IP and remove from /etc/csf/csf.deny
+        ${CSF} -trd "${ip}" >/dev/null 2>&1; # Remove an IP from the temporary IP ban list only
+    fi;
     UNBLOCKED=1;
 fi;
 

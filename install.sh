@@ -68,7 +68,7 @@ csf_install()
     cat csf.pignore.custom >> "${CSF_PIGNORE}";
     rm -f csf.pignore.custom;
 
-    egrep -v "^#|^$" "${CSF_PIGNORE}" | sort | uniq | tee "${CSF_PIGNORE}~bak";
+    grep -Ev "^#|^$" "${CSF_PIGNORE}" | sort | uniq | tee "${CSF_PIGNORE}~bak";
     mv -f "${CSF_PIGNORE}~bak" "${CSF_PIGNORE}";
 
     echo "[NOTICE] CSF/LFD was installed! Configuration file can be found under ${CSF_CONF}";
@@ -115,7 +115,7 @@ csf_reconfig()
 
     echo "";
     echo "[OK] A list of opened ports in firewall";
-    egrep "^(UD|TC)P(|6)_(IN|OUT)" "${CSF_CONF}" --color;
+    grep -E "^(UD|TC)P(|6)_(IN|OUT)" "${CSF_CONF}" --color;
     echo "";
 
     service lfd restart >/dev/null 2>&1;
@@ -168,7 +168,7 @@ da_reconfig;
 echo "[OK] Scripts installed!";
 echo "";
 echo "[INFO] Installed settings in Directadmin:";
-/usr/local/directadmin/directadmin c | sort | egrep --color "bruteforce|brute_force_log_scanner|brute_force_scan_apache_logs|brute_force_time_limit|ip_brutecount|unblock_brute_ip_time|user_brutecount|hide_brute_force_notifications|clear_brute_log_time=";
+/usr/local/directadmin/directadmin c | sort | grep -E --color "bruteforce|brute_force_log_scanner|brute_force_scan_apache_logs|brute_force_time_limit|ip_brutecount|unblock_brute_ip_time|user_brutecount|hide_brute_force_notifications|clear_brute_log_time=";
 echo "";
 echo "You can change them in Directadmin interface at admin level or in directadmin.conf";
 echo "";

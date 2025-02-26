@@ -54,6 +54,10 @@ CSF_GREP_API_CALL=0;        # SET TO 1 TO USE API CALL TO CSF
                             # SET TO 0 (ZERO) TO GREP A FILE DIRECTLY
                             # 1 - MORE ACCURATE, USE csf
                             # 0 - MORE SPEEDY, USE egrep
+
+CSF_USE_CLUSTER_BLOCK=0;    # SET TO 1 TO USE API CALL TO CSF WITH CLUSTER MODE
+                            # SET TO 0 (ZERO) TO USE REGULAR CSF API CALLS
+
 DEBUG=0;
 # ============================================================
 
@@ -77,6 +81,7 @@ CAF="/etc/csf/csf.allow";
 CATF="/var/lib/csf/csf.tempallow";
 CDF="/etc/csf/csf.deny";
 CDTF="/var/lib/csf/csf.tempban";
+CCF="/etc/csf/csf.conf";
 
 CSF="/usr/sbin/csf";
 SED="$(which sed)";
@@ -217,7 +222,7 @@ fi;
 
 
 # Is the IP whitelisted permamently by CSF?
-c=$(egrep -c "(^|=)${ip}($|\s|#)" "${CAF}");
+c=$(grep -Ec "(^|=)${ip}($|\s|#)" "${CAF}");
 if [ "${c}" -gt 0 ];
 then
     echo "[WARNING] The IP ${ip} is whitelisted in ${CAF}. Not going to block it...";
@@ -238,12 +243,12 @@ fi;
 if [ "${CSF_GREP_API_CALL}" == "0" ];
 then
     # MORE SPEEDY
-    egrep -q "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
+    grep -Eq "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
     RVAL=$?;
     c=0;
 else
     # MORE ACCURATE
-    c=$(${CSF} -g "${ip}" | egrep -c 'csf.deny|Temporary Blocks');
+    c=$(${CSF} -g "${ip}" | grep -Ec 'csf.deny|Temporary Blocks');
 fi;
 
 if [ "${c}" -gt 0 ] || [ "${RVAL}" == "0" ];
@@ -251,22 +256,41 @@ then
     echo -n "[WARNING] The IP ${ip} is already blocked: ";
     if [ "${CSF_GREP_API_CALL}" == "0" ];
     then
-        details=`egrep "^${ip}($|\s)" "${CDF}" | cut -d\# -f2 | head -1 | xargs`;
+        details=`grep -E "^${ip}($|\s)" "${CDF}" | cut -d\# -f2 | head -1 | xargs`;
         [ -z "${details}" ] && details=$(grep "|${ip}|" "${CDTF}" | cut -d\| -f6 | head -1 | xargs);
         echo -n "${details}";
     else
-        ${CSF} -g "${ip}" | egrep 'csf.deny|Temporary Blocks' | cut -d\# -f2 | head -1;
+        ${CSF} -g "${ip}" | grep -E 'csf.deny|Temporary Blocks' | cut -d\# -f2 | head -1;
     fi;
     exit 6;
 fi;
 
 
-TF=$(mktemp);
-if [ -z "${BLOCK_PORTS}" ];
+
+# CHECK WHETHER THE CLUSTER MODE IS ENABLED
+if [ "${CSF_USE_CLUSTER_BLOCK}" == "1" ];
 then
-    ${CSF} -d "${ip}" "Blocked with Directadmin BFM on $(date -R)" > "${TF}" 2>&1;
+    # IS IT ENABLED IN CSF/LFD?
+    CSF_USE_CLUSTER_BLOCK=$(grep "^CLUSTER_CONFIG" "${CCF}" | cut -d= -f2 | xargs echo);
+fi;
+
+TF=$(mktemp);
+
+if [ "${CSF_USE_CLUSTER_BLOCK}" == "1" ];
+then
+    if [ -z "${BLOCK_PORTS}" ];
+    then
+        ${CSF} --cdeny "${ip}" "Blocked with Directadmin BFM on $(date -R)" > "${TF}" 2>&1;
+    else
+        ${CSF} --ctempdeny "${ip}" "${TTL}" -p "${BLOCK_PORTS}" -d inout "Blocked port ${BLOCK_PORTS} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
+    fi;
 else
-    ${CSF} --tempdeny "${ip}" "${TTL}" -p "${BLOCK_PORTS}" -d inout "Blocked port ${BLOCK_PORTS} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
+    if [ -z "${BLOCK_PORTS}" ];
+    then
+        ${CSF} -d "${ip}" "Blocked with Directadmin BFM on $(date -R)" > "${TF}" 2>&1;
+    else
+        ${CSF} --tempdeny "${ip}" "${TTL}" -p "${BLOCK_PORTS}" -d inout "Blocked port ${BLOCK_PORTS} with Directadmin BFM on $(date -R)" >> "${TF}" 2>&1;
+    fi;
 fi;
 
 c=$(grep -c " DENY_IP_LIMIT " "${TF}");
@@ -285,11 +309,11 @@ fi;
 
 if [ "${CSF_GREP_API_CALL}" == "0" ];
 then
-    egrep -q "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
+    grep -Eq "^${ip}($|\s)" "${CDF}" || grep -q "|${ip}|" "${CDTF}";
     RVAL=$?;
     c=0;
 else
-    c=$(${CSF} -g "${ip}" | egrep -c 'csf.deny|Temporary Blocks');
+    c=$(${CSF} -g "${ip}" | grep -Ec 'csf.deny|Temporary Blocks');
 fi;
 if [ "${c}" -gt 0 ] || [ "${RVAL}" == "0" ];
 then

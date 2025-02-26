@@ -38,9 +38,8 @@ die()
     echo "$1" echo ""; exit "$2";
 }
 
-[ -x "${CSF}" ] || csf_install;
-
-[ -x "/usr/local/directadmin/directadmin" ] || die "[ERROR] Directadmin not found! You should install it first!" 1;
+[ -x "${CSF}" ] || die "[ERROR] CSF/LFD not found! You should install it first!" 1;
+[ -x "/usr/local/directadmin/directadmin" ] || die "[ERROR] Directadmin not found! You should install it first!" 2;
 cd "${DIR}" || die "[ERROR] Could not change directory to ${DIR}" 1;
 
 do_update "block_404.sh" "https://files.plugins-da.net/dl/block_404.sh.txt";
